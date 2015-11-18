@@ -3,6 +3,7 @@
 from __future__ import print_function
 from channel_loader import get_data
 from sklearn.ensemble import RandomForestClassifier
+import time
 
 def main():
     X_BBC, y_BBC = get_data('BBC')
@@ -12,10 +13,19 @@ def main():
 
     clf = RandomForestClassifier(n_estimators=10)
     print('Training...')
-    clf.fit(X_BBC, y_BBC)
 
+    t0 = time.clock()
+    clf.fit(X_BBC, y_BBC)
+    trainTime = time.clock() - t0
+
+    print('Training time: ' + str(trainTime) + 's\n')
     print('Testing...')
+    t0 = time.clock()
     score = clf.score(X_CNN, y_CNN)
+    testTime = time.clock() - t0
+
+    print('Testing time: ' + str(testTime) + 's\n')
+    print('Total time: ' + str(trainTime + testTime) + 's\n')
     print('score = ' + str(score))
 
 

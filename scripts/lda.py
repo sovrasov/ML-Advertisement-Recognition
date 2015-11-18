@@ -2,7 +2,7 @@
 
 from __future__ import print_function
 from channel_loader import get_data
-import sklearn
+import sklearn, time
 if sklearn.__version__ < '0.17':
     from sklearn.lda import LDA
 else:
@@ -16,10 +16,20 @@ def main():
 
     clf = LDA()
     print('Training...')
-    clf.fit(X_BBC.toarray(), y_BBC)
 
+    t0 = time.clock()
+    clf.fit(X_BBC.toarray(), y_BBC)
+    trainTime = time.clock() - t0
+
+    print('Training time: ' + str(trainTime) + 's\n')
     print('Testing...')
+
+    t0 = time.clock()
     score = clf.score(X_CNN.toarray(), y_CNN)
+    testTime = time.clock() - t0
+
+    print('Testing time: ' + str(testTime) + 's\n')
+    print('Total time: ' + str(trainTime + testTime) + 's\n')
     print('score = ' + str(score))
 
 if __name__ == '__main__':
