@@ -10,7 +10,7 @@ def main():
     print('# of BBC frames = ' + str(X_BBC.shape[0]))
     print('# of CNN frames = ' + str(X_CNN.shape[0]))
 
-    clf = SVC()
+    clf = SVC(C=0.5, cache_size=2000, class_weight='auto', kernel='linear')
     print('Training...')
     clf.fit(X_BBC, y_BBC)
 
