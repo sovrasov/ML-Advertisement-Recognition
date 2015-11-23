@@ -19,7 +19,6 @@ cdef class PrototypeSelector:
     def fcnn_reduce(self, int n_neighbors):
         cdef cfcnn.Dataset ds_reduced
         ds_reduced = cfcnn.fcnn_reduce(self.ds, n_neighbors)
-        self.reduction_ratio = ds_reduced.n_instances / self.ds.n_instances
         return self._to_numpy_arrays(ds_reduced)
 
     cdef cfcnn.Dataset _out_of_numpy_arrays(self,

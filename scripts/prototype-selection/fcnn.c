@@ -21,7 +21,7 @@ flpoint squared_dist(int N, flpoint* a, flpoint* b)
     flpoint result = 0.;
     for (i = 0; i < N; i++)
     {
-        int d = a[i] - b[i];
+        flpoint d = a[i] - b[i];
         result += d * d;
     }
 
@@ -57,18 +57,15 @@ void count_classes(const Dataset ds, int* n_classes, int** class_labels)
         (*class_labels)[i] = temp_class_labels[i];
     free(temp_class_labels);
 }
-        
+
 void find_classes_centroids_in_data(const Dataset ds, int n_classes,
         int* class_labels, int* indices)
 {
     int i, j;
-    flpoint* centroids = malloc(sizeof(flpoint) * n_classes * ds.n_features);
-    int* class_instance_count = malloc(sizeof(int) * n_classes);
+    flpoint* centroids = calloc(n_classes * ds.n_features, sizeof(flpoint));
+    int* class_instance_count = calloc(n_classes, sizeof(int));
     flpoint* min_squared_dists = NULL;
     int* closest_to_centroids = NULL;
-
-    memset(centroids, 0, sizeof(flpoint) * n_classes * ds.n_features);
-    memset(class_instance_count, 0, sizeof(int) * n_classes);
 
     // add each instance to the sum of instances of the corresponding
     // class
@@ -81,7 +78,7 @@ void find_classes_centroids_in_data(const Dataset ds, int n_classes,
                 current_class = j;
                 break;
             }
-        
+
         for (j = 0; j < ds.n_features; j++)
             centroids[current_class * ds.n_features + j] +=
                 ds.X[i * ds.n_features + j];
@@ -102,10 +99,12 @@ void find_classes_centroids_in_data(const Dataset ds, int n_classes,
     fill_int_array(closest_to_centroids, n_classes, -1);
     for (i = 0; i < n_classes; i++)
         min_squared_dists[i] = -1.;
+
     for (i = 0; i < ds.n_instances; i++)
     {
         int current_class = -1;
         flpoint current_squared_dist;
+
         for (j = 0; j < n_classes; j++)
             if (ds.y[i] == class_labels[j])
             {
@@ -151,6 +150,7 @@ Dataset fcnn_reduce(Dataset ds, int n_neighbors)
     int neighbor_majority_class;
     int neighbor_majority_class_count;
     Dataset ds_reduced;
+    int iter_index = 0;
 
     count_classes(ds, &n_classes, &class_labels);
 
@@ -177,8 +177,9 @@ Dataset fcnn_reduce(Dataset ds, int n_neighbors)
 
         // find instances which are not in S
         S_index = 0;
+        non_S_size = 0;
         for (i = 0; i < ds.n_instances; i++)
-            if (i < S[S_index])
+            if (S_index == S_size || i < S[S_index])
                 non_S[non_S_size++] = i;
             else
                 S_index++;
@@ -191,29 +192,31 @@ Dataset fcnn_reduce(Dataset ds, int n_neighbors)
             {
                 for (k = 0; k < n_neighbors; k++)
                 {
-                    if (nearest[non_S[i] * n_neighbors + k] < 0)
+                    int* nearest_for_i = nearest + non_S[i] * n_neighbors;
+                    if (nearest_for_i[k] < 0)
                     {
-                        nearest[non_S[i] * n_neighbors + k] =
+                        nearest_for_i[k] =
                             delta_S[j];
                         break;
                     }
                     if (squared_dist(ds.n_features,
                                 ds.X + ds.n_features *
-                                nearest[non_S[i] * n_neighbors + k],
+                                nearest_for_i[k],
                                 ds.X + ds.n_features * non_S[i]) >
                             squared_dist(ds.n_features,
                                 ds.X + ds.n_features * non_S[i],
                                 ds.X + ds.n_features * delta_S[j]))
                     {
+                        // move all farther neighbors to the right
                         for (l = n_neighbors - 1; l >= k + 1; l--)
-                            nearest[non_S[i] * n_neighbors + l] =
-                                nearest[non_S[i] * n_neighbors + l - 1];
-                        nearest[non_S[i] * n_neighbors + k] = delta_S[j];
+                            nearest_for_i[l] = nearest_for_i[l - 1];
+                        nearest_for_i[k] = delta_S[j];
+                        break;
                     }
                 }
             }
 
-            fill_int_array(votes, n_classes, 0);
+            memset(votes, 0, sizeof(int) * n_classes);
             // collect votes for their classes from these neighbors
             for (j = 0; j < n_neighbors; j++)
             {
@@ -227,18 +230,22 @@ Dataset fcnn_reduce(Dataset ds, int n_neighbors)
                             current_class = k;
                             break;
                         }
+                    if (current_class == -1)
+                        printf("danger1\n");
                     votes[current_class]++;
                 }
+                else
+                    break;
             }
 
             // find majority class of these neighbors
-            neighbor_majority_class = 0;
+            neighbor_majority_class = class_labels[0];
             neighbor_majority_class_count = votes[0];
             for (j = 1; j < n_classes; j++)
                 if (votes[j] > neighbor_majority_class_count)
                 {
                     neighbor_majority_class_count = votes[j];
-                    neighbor_majority_class = j;
+                    neighbor_majority_class = class_labels[j];
                 }
 
             // if majority class is incorrect (i.e. non_S[i] would
@@ -250,8 +257,9 @@ Dataset fcnn_reduce(Dataset ds, int n_neighbors)
                 {
                     int current_neighbor =
                         nearest[non_S[i] * n_neighbors + j];
-                    if (current_neighbor >= 0 &&
-                            (rep[current_neighbor] < 0 ||
+                    if (current_neighbor >= 0)
+                    {
+                        if (rep[current_neighbor] < 0 ||
                              squared_dist(ds.n_features,
                                  ds.X + ds.n_features * current_neighbor,
                                  ds.X + ds.n_features * non_S[i]) <
@@ -259,8 +267,9 @@ Dataset fcnn_reduce(Dataset ds, int n_neighbors)
                                  ds.X + ds.n_features * current_neighbor,
                                  ds.X + ds.n_features * rep[current_neighbor])
                             )
-                        )
-                        rep[current_neighbor] = non_S[i];
+                            rep[current_neighbor] = non_S[i];
+                    }
+                    else break;
                 }
             }
         }
@@ -279,6 +288,7 @@ Dataset fcnn_reduce(Dataset ds, int n_neighbors)
             if (rep[S[i]] >= 0 && !instance_in_delta_S)
                 delta_S[delta_S_size++] = rep[S[i]];
         }
+        iter_index++;
     }
 
     // form a new dataset with only selected instances

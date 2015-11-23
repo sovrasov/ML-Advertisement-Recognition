@@ -1,8 +1,10 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from __future__ import division, print_function
 from time import clock, time
 from sys import platform
+from sys import argv
 
 import numpy as np
 from sklearn.datasets import load_svmlight_file
@@ -15,11 +17,13 @@ else:
     from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.cross_validation import StratifiedKFold
+from sklearn.feature_selection import VarianceThreshold
+
 from prototype_selection import PrototypeSelector
 
 
 def main():
-    channels = ( 'NDTV', 'CNN', 'BBC', 'TIMESNOW', 'CNNIBN' )
+    channels = ( 'NDTV', 'TIMESNOW', 'CNNIBN', 'CNN', 'BBC' )
     learn_methods = (
             { 'class': KNeighborsClassifier, 'name': 'kNN',
                 'params': {'n_neighbors': 5}, 'dense_X': False },
@@ -35,64 +39,63 @@ def main():
     timer = clock if platform == 'win32' else time
 
     for channel in channels:
-        X, y = load_svmlight_file('../../Dataset/%s.txt' % channel)
-        print('Loaded %s dataset...' % channel)
+        X, y = load_svmlight_file('../../Dataset/{}.txt'.format(channel))
+        X = VarianceThreshold().fit_transform(X)
+        # print('Loaded {} dataset...'.format(channel))
         partition = StratifiedKFold(y, 10)
         reduction_rates = []
         ps_times = []
-        
+
         for method in learn_methods:
             method_class = method['class']
             method_params = method['params']
             train_times = []
             scores = []
-            print('Testing with %s...' % method['name'])
+            # print('Testing with {}...'.format(method['name']))
 
-            index = 0
             for train, test in partition:
-                print('Partition #%d' % index)
+                # print('Partition #{}'.format(index))
                 X_train, X_test, y_train, y_test = (X[train], X[test],
                         y[train], y[test])
                 X_train = X_train.toarray()
-                X_test = X_test.toarray() if method['dense_X'] else X_test
+                X_test = X_test.toarray()
+                # print('Selecting prototypes...')
                 start_time = timer()
-                print(X_train.shape[0])
                 ps = PrototypeSelector(X_train, y_train.astype(np.int))
-                X_train_red, y_train_red = ps.fcnn_reduce(1)
-                # X_train_red, y_train_red = FCNN(n_neighbors=2).reduce_data(
-                        # X_train, y_train)
+                X_train_red, y_train_red = ps.fcnn_reduce(int(argv[1]))
                 end_time = timer()
                 ps_times.append(end_time - start_time)
-                # reduction_rates.append(X_train.shape[0] / X_train_red.shape[0])
-                reduction_rates.append(ps.reduction_ratio)
-        
+                reduction_rates.append(X_train_red.shape[0] / X_train.shape[0])
+                # print('{}% of {} instances selected in {} s.'.format(
+                    # 100 * reduction_rates[-1], X_train.shape[0], ps_times[-1]))
+
                 clf = method['class'](**method['params'])
+                # print('Training...')
                 start_time = timer()
                 clf.fit(X_train_red, y_train_red)
                 end_time = timer()
                 train_times.append(end_time - start_time)
 
+                # print('Testing...')
                 scores.append(clf.score(X_test, y_test))
-                index += 1
 
-            mean_score = mean(scores)
-            score_variance = var(scores)
-            mean_train_time = mean(train_times)
-            train_time_variance = var(train_times)
+            mean_score = np.mean(scores)
+            score_variance = np.var(scores)
+            mean_train_time = np.mean(train_times)
+            train_time_variance = np.var(train_times)
 
-            print('%s, %s: Q = %f +/- %f, Ttr = %f +/- %f' % (
+            print('{}, {}: Q = {}±{}, Ttr = {}±{}'.format(
                 channel, method['name'], mean_score, score_variance,
                 mean_train_time, train_time_variance))
 
-        mean_reduction_rate = mean(reduction_rates)
-        reduction_rate_variance = var(reduction_rates)
-        mean_ps_time = mean(ps_times)
-        ps_time_variance = var(ps_times)
+        mean_reduction_rate = np.mean(reduction_rates)
+        reduction_rate_variance = np.var(reduction_rates)
+        mean_ps_time = np.mean(ps_times)
+        ps_time_variance = np.var(ps_times)
 
-        print('R = %f +/- %f, Tps = %f +/- %f' % (mean_reduction_rate,
+        print('R = {}±{}, Tps = {}±{}'.format(mean_reduction_rate,
             reduction_rate_variance, mean_ps_time, ps_time_variance))
 
 
 if __name__ == '__main__':
     main()
-
