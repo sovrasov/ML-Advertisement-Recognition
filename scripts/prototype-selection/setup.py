@@ -6,7 +6,7 @@ import numpy
 extensions = [
         Extension(
             'prototype_selection',
-            ['prototype_selection.pyx', 'fcnn.c'],
+            ['prototype_selection.pyx', 'psmethods.c'],
             include_dirs=[numpy.get_include()])
 ]
 
