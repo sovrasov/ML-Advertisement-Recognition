@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from __future__ import division, print_function
 from time import clock, time
@@ -22,6 +23,8 @@ from sklearn.feature_selection import VarianceThreshold
 
 
 def main():
+	f = open('PCA results.txt', 'w')
+
 	channels = ( 'NDTV', 'TIMESNOW', 'CNNIBN', 'CNN', 'BBC' )
 	learn_methods = ({ 'class': KNeighborsClassifier, 'name': 'kNN',
 	'params': {'n_neighbors': 5}, 'dense_X': False },
@@ -62,6 +65,8 @@ def main():
 	    print('PCA finished')
 
 	    for X in Xs_reduced:
+	    	print('Model dimension = {}'.format(X[0].shape[0]))
+	    	f.write('Model dimension = {}'.format(X[0].shape[0]))
 	        for train, test in StratifiedKFold(y, 10):
 	            X_train, X_test, y_train, y_test = (X[train], X[test],
 	                    y[train], y[test])
@@ -83,13 +88,13 @@ def main():
 	                print('Testing with {}...'.format(method['name']))
 
 	                clf = method['class'](**method['params'])
-	                print('Training...')
+	                #print('Training...')
 	                start_time = timer()
 	                clf.fit(X_train, y_train)
 	                end_time = timer()
 	                train_times[method['name']].append(end_time - start_time)
 
-	                print('Testing...')
+	                #print('Testing...')
 	                scores[method['name']].append(clf.score(X_test, y_test))
 
 	        for method in learn_methods:
@@ -101,6 +106,11 @@ def main():
 	            print('{}, {}: Q = {}±{}, Ttr = {}±{}'.format(
 	                channel, method['name'], mean_score, score_variance,
 	                mean_train_time, train_time_variance))
+
+	            f.write('{}, {}: Q = {}±{}, Ttr = {}±{}'.format(
+	                channel, method['name'], mean_score, score_variance,
+	                mean_train_time, train_time_variance))
+	f.close()
 """
 	        mean_reduction_rate = np.mean(reduction_rates)
 	        reduction_rate_variance = np.var(reduction_rates)
@@ -110,6 +120,5 @@ def main():
 	        print('R = {}±{}, Tps = {}±{}'.format(mean_reduction_rate,
 	            reduction_rate_variance, mean_ps_time, ps_time_variance))
 """
-
 if __name__ == '__main__':
 	main()
