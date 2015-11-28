@@ -1,0 +1,29 @@
+\documentclass[a4paper]{article}
+\usepackage{fontspec}
+\usepackage[russian]{babel}
+\usepackage{unicode-math}
+\usepackage[a4paper]{geometry}
+\usepackage{indentfirst}
+\usepackage{color}
+
+\setmainfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+
+\begin{document}
+
+\title{Рассмотрение методов отбора признаков и объектов обучающей выборки на примере задачи распознавания телевизионной рекламы в видеопотоке}
+\author{Антон Ларин\\ М0813-2 \and Сергей Ларин\\ М0816-2 \and Владислав Соврасов\\ М0813-2}
+\date{\today}
+\maketitle
+
+\begin{abstract}
+\textcolor{red}{Обновить по содержанию}\\
+В данной работе производится обзор методов отбора признаков (feature selection) и отбора объектов обучающей выборки (instance selection), служащих для сокращения размера задачи машинного обучения. Приводятся описания некоторых методов данных классов, а также обсуждаются результаты их применения к модельной задаче распознавания телевизионной рекламы в видеопотоке.
+\end{abstract}
+\input{introduction}
+\input{base-methods}
+\input{features-selection}
+\input{instance-selection}
+\input{conclusion}
+\end{document}
+
