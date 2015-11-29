@@ -53,7 +53,7 @@ def test_method(clf, name):
         plt.savefig('{}_{}_PCA.png'.format(name, channel))
 
         plt.clf()
-        plt.plot(n_features, scores)
+        plt.plot(n_features, times)
         locs, labels = plt.yticks()
         plt.yticks(locs, list(map(lambda x: "%g" % x, locs)))
         plt.ylabel('Mean learning time')
@@ -64,20 +64,20 @@ def test_method(clf, name):
 
 def main():
 
-    clf = RandomForestClassifier(n_estimators=10, n_jobs = -1)
+    clf = RandomForestClassifier(n_estimators=60, n_jobs = -1)
     name = 'randforest'
-    test_method(clf, name)
-    
-    clf = GradientBoostingClassifier(n_estimators=100)
-    name = 'gradboosting'
     test_method(clf, name)
 
     clf = LDA()
     name = 'LDA'
     test_method(clf, name)
 
-    clf = neighbors.KNeighborsClassifier(n_neighbors = 15, n_jobs=-1)
+    clf = neighbors.KNeighborsClassifier(n_neighbors = 15)
     name = 'KNN'
+    test_method(clf, name)
+
+    clf = GradientBoostingClassifier(n_estimators=100)
+    name = 'gradboosting'
     test_method(clf, name)
 
 if __name__ == '__main__':
