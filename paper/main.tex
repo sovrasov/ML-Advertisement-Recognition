@@ -1,6 +1,7 @@
 \documentclass[a4paper]{article}
 \usepackage{fontspec}
 \usepackage[russian]{babel}
+\usepackage{amsmath}
 \usepackage{amssymb}
 
 \usepackage[a4paper]{geometry}
@@ -17,6 +18,9 @@
 
 \newcommand{\tbd}[1]{
     \textcolor{red}{#1}
+}
+\newcommand{\tworowcell}[2]{
+    \begin{tabular}{@{}c@{}}#1 \\ #2\end{tabular}
 }
 \renewcommand{\setminus}{\mathbin{\backslash}}
 
