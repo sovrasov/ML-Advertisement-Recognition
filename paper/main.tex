@@ -2,12 +2,18 @@
 \usepackage{fontspec}
 \usepackage[russian]{babel}
 \usepackage{unicode-math}
+
 \usepackage[a4paper]{geometry}
 \usepackage{indentfirst}
 \usepackage{color}
+\usepackage{graphicx}
 
 \setmainfont{CMU Serif}
 \setsansfont{CMU Sans Serif}
+
+\newcommand{\tbd}[1]{
+    \textcolor{red}{#1}
+}
 
 \begin{document}
 
@@ -17,9 +23,10 @@
 \maketitle
 
 \begin{abstract}
-\textcolor{red}{Обновить по содержанию}\\
+\tbd{Обновить по содержанию}\\
 В данной работе производится обзор методов отбора признаков (feature selection) и отбора объектов обучающей выборки (instance selection), служащих для сокращения размера задачи машинного обучения. Приводятся описания некоторых методов данных классов, а также обсуждаются результаты их применения к модельной задаче распознавания телевизионной рекламы в видеопотоке.
 \end{abstract}
+
 \input{introduction}
 \input{base-methods}
 \input{features-selection}
