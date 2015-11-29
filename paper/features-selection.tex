@@ -16,9 +16,18 @@
  размерности, сумма квадратов расстояний до которого от данной системы точек минимальна. Стоит обратить внимание на то, что информация о принадлежности точек к какому-либо классу здесь не учитывается.
  Пусть \( X_i \subseteq \mathbb{R}^n, i=\overline{1,m} \) - набор произвольных векторов. Требуется найти векторы \(v_0\ldots v_d\subseteq \mathbb{R}^d, \Vert v_j \Vert = 1, v_i \bot v_j, j \neq  i, d \leq n\), задающие линейное многообразие L так, чтобы \(
  \sum_{i=1}^{m} dist^2(X_i, L) = \sum_{i=1}^{m}\Vert X_i - v_0 - \sum_{j=1}^k\langle X_i - v_0; v_j\rangle\ v_j \Vert\rightarrow min\)
+ 
+ 
+ 
  \subsection*{Результаты применения PCA}
  \begin{Результаты применения PCA}
  Лучшие результаты при уменьшении размерности с помошью PCA показал алгоритм random forest.
- \begin{figure} \centering \includegraphics{images/randforest_NDTV_PCA.png} \caption{Random forest on NDTV } \label{fig:image} \end{figure}
+ \begin{figure} \centering \includegraphics[width=1\textwidth]{images/randforest_NDTV_PCA.png} \caption{Random forest on NDTV } \label{fig:image} \end{figure}
  При одновременном улучшении результата кроссвалидации практически линейно уменьшается время обучения алгоритма.
-  \begin{figure} \centering \includegraphics{images/randforest_NDTV_PCA_time.png} \caption{Random forest on NDTV train time} \label{fig:image} \end{figure}
+  \begin{figure} \centering \includegraphics[width=1\textwidth]{images/randforest_NDTV_PCA_time.png} \caption{Random forest on NDTV train time} \label{fig:image} \end{figure}
+  Применение PCA в сочетании с LDA не дало результата в плане улучшения качества предсказания. Время обучения также уменьшается линейно.
+  \begin{figure} \centering \includegraphics[width=1\textwidth]{images/LDA_NDTV_PCA.png} \caption{LDA on NDTV } \label{fig:image} \end{figure}
+  \begin{figure} \centering \includegraphics[width=1\textwidth]{images/LDA_NDTV_PCA_time.png} \caption{LDA on NDTV train time} \label{fig:image} \end{figure}
+  \par
+  
+  
