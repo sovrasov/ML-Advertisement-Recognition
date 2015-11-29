@@ -11,6 +11,9 @@
 \setmainfont{CMU Serif}
 \setsansfont{CMU Sans Serif}
 
+\usepackage[backend=biber]{biblatex}
+\addbibresource{refs.bib}
+
 \newcommand{\tbd}[1]{
     \textcolor{red}{#1}
 }
@@ -32,5 +35,7 @@
 \input{features-selection}
 \input{instance-selection}
 \input{conclusion}
+\newpage
+\printbibliography
 \end{document}
 
