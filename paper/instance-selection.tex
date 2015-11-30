@@ -15,14 +15,66 @@
 
 Метод CNN был сформулирован для метода одного ближайшего соседа, однако расширение на \(k\) ближайших соседей производится очевидным образом: при классификации очередного элемента \(T\) (а впоследствии \(R\)) используется метод \(k\)NN с обучающей выборкой \(S\). Стоит отметить, что данный метод строит согласованное подмножество только по отношению к методу \(k\) ближайших соседей (для конкретного \(k\)), результирующее подмножество \(S\) не обязано быть согласованным для произвольного алгоритма классификации.
 
-В таблице~\ref{cnn-results-table} приведены результаты применения метода CNN:
+В таблице~\ref{table:cnn-results} приведены результаты применения метода CNN с правилом одного ближайшего соседа. В скобках за показателями указано, насколько данный показатель изменился по сравнению с таблицей~\ref{table:base-all}.
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c||c||c|c|}
+    \cline{2-4}
+    \multicolumn{1}{c||}{} & Сжатие \(T\) & \(k\)NN & LDA \\
+    \hline \hline
+    CNN & \tworowcell{\(R=32.8\%\)}{\(T_{PS}=55.4s\)} & \tworowcell{\(Q=59.6\%(-18.4\%)\)}{\(T_{train}=0.064s(-99.8\%)\)} & \tworowcell{\(Q=85.2\%(-5.2\%)\)}{\(T_{train}=0.3s(+4900\%)\)} \\ \hline
+    BBC & \tworowcell{\(R=39.3\%\)}{\(T_{PS}=40s\)} & \tworowcell{\(Q=50.2\%(-17\%)\)}{\(T_{train}=0.068s(-81.6\%)\)} & \tworowcell{\(Q=74\%(-10.2\%)\)}{\(T_{train}=0.28s(+9233\%)\)} \\ \hline
+    CNN-IBN & \tworowcell{\(R=30.2\%\)}{\(T_{PS}=113.4s\)} & \tworowcell{\(Q=45.6\%(-34\%)\)}{\(T_{train}=0.11s(-81\%)\)} & \tworowcell{\(Q=86\%(-5.8\%)\)}{\(T_{train}=0.42s(+320\%)\)} \\ \hline
+    TIMES NOW & \tworowcell{\(R=32.8\%\)}{\(T_{PS}=162.3s\)} & \tworowcell{\(Q=48.5\%(-27.6\%)\)}{\(T_{train}=0.13s(-80.6\%)\)} & \tworowcell{\(Q=87.8\%(-3.9\%)\)}{\(T_{train}=0.56s(+460\%)\)} \\ \hline
+    NDTV & \tworowcell{\(R=26.3\%\)}{\(T_{PS}=24.5s\)} & \tworowcell{\(Q=58.3\%(-25.5\%)\)}{\(T_{train}=0.03s(-97\%)\)} & \tworowcell{\(Q=90\%(-3.3\%)\)}{\(T_{train}=0.18s(+5.8\%)\)} \\ \hline
+\end{tabular}
+\newline \vspace*{0.5cm} \newline
+\begin{tabular}{|c||c|c|c|}
+    \cline{2-4}
+    \multicolumn{1}{c||}{} & Random forest & SVM & GTB \\
+    \hline \hline
+    CNN & \tworowcell{\(Q=87.4\%(-4.8\%)\)}{\(T_{train}=3.98s(-74.8\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    BBC & \tworowcell{\(Q=75.1\%(-10.3\%)\)}{\(T_{train}=2.5s(-73.1\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    CNN-IBN & \tworowcell{\(Q=91.8\%(-2.6\%)\)}{\(T_{train}=6.2s(-72.3\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    TIMES NOW & \tworowcell{\(Q=90.1\%(-2.9\%)\)}{\(T_{train}=7.6s(-74.4\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    NDTV & \tworowcell{\(Q=94.4\%(-1\%)\)}{\(T_{train}=2.3s(-75.8\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    \end{tabular}
+    \caption{Сводная таблица результатов метода CNN и базовых методов после применения CNN}
+    \label{table:cnn-results}
+\end{table}
 
 \subsection{Fast condensed nearest neighbor}
 Метод FCNN \cite{angiulli} был предложен с целью исправить некоторые недостатки CNN и других методов, основанных на \(k\)NN: зависимость результирующего подмножества \(S\) от порядка элементов в обучающей выборке и низкая производительность и масштабируемость. Сначала \(S\) содержит точки, ближайшие к барицентрам классов (барицентр класса --- \(\mathbf{x}_C=|C|^{-1}\sum_{c\in C}\mathbf{x}_c\), где \(C\) --- множество индексов обектов, принадлежащих одному классу). Затем, множество \(T\setminus S\) разбивается на \(|S|\) непересекающихся классов \(Vor(p, S, T)\) (так называмые Voronoi cells), в каждом из которых находятся объекты, для которых ближайшим соседом является один и тот же объект \(p\in S\). Затем все объекты из \(T\setminus S\) классифицируются методом ближайшего соседа с обучающей выборкой \(S\) и в каждом \(Vor(p, S, T)\) выбираются неверно классифицированные объекты, которые составляют множества \(Voren(p, S, T)\) (Voronoi enemies). После этого для каждого такого \(p\in S\), что \(Voren(p, S, T)\neq\varnothing\) выбирается ближайший к \(p\) объект из \(Voren(p, S, T)\) и они одновременно добавляются в \(S\). На каждой следующей итерации процедура повторяется для нового \(S\). Алгоритм останавливается, когда на последней итерации в \(S\) не было добавлено ни одного элемента.
 
 FCNN может быть расширен на число ближайших соседей, отличных от 1, аналогично CNN: при классификации объектов в \(T\setminus S\) нужно использовать метод \(k\)NN. В \cite{angiulli} приведены доказательства того, что он строит согласованное подмножество \(S\), одинаковое для любого упорядочивания обучающей выборки.
 
-В таблице~\ref{fcnn-results-table} приведены результаты применения метода FCNN:
+В таблице~\ref{table:fcnn-results} приведены результаты применения метода FCNN с правилом одного ближайшего соседа.
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c||c||c|c|}
+    \cline{2-4}
+    \multicolumn{1}{c||}{} & Сжатие \(T\) & \(k\)NN & LDA \\
+    \hline \hline
+    CNN & \tworowcell{\(R=42.1\%\)}{\(T_{PS}=69.9s\)} & \tworowcell{\(Q=76.7\%(-1.6\%)\)}{\(T_{train}=0.09s(-71.9\%)\)} & \tworowcell{\(Q=89.4\%(-1.1\%)\)}{\(T_{train}=0.39s(+6400\%)\)} \\ \hline
+    BBC & \tworowcell{\(R=42.5\%\)}{\(T_{PS}=42.3s\)} & \tworowcell{\(Q=76.3\%(-1.1\%)\)}{\(T_{train}=0.065s(-82.4\%)\)} & \tworowcell{\(Q=83.3\%(-1\%)\)}{\(T_{train}=0.3s(+9900\%)\)} \\ \hline
+    CNN-IBN & \tworowcell{\(R=41.9\%\)}{\(T_{PS}=147s\)} & \tworowcell{\(Q=78.2\%(-1.8\%)\)}{\(T_{train}=0.17s(-71.7\%)\)} & \tworowcell{\(Q=90.8\%(-1\%)\)}{\(T_{train}=0.62s(+520\%)\)} \\ \hline
+    TIMES NOW & \tworowcell{\(R=46.5\%\)}{\(T_{PS}=236s\)} & \tworowcell{\(Q=74.7\%(-1.8\%)\)}{\(T_{train}=0.22s(-78\%)\)} & \tworowcell{\(Q=91\%(-0.7\%)\)}{\(T_{train}=0.81s(+710\%)\)} \\ \hline
+    NDTV & \tworowcell{\(R=35.2\%\)}{\(T_{PS}=33.2s\)} & \tworowcell{\(Q=83.1\%(-0.8\%)\)}{\(T_{train}=0.05s(-95.7\%)\)} & \tworowcell{\(Q=92.4\%(-0.9\%)\)}{\(T_{train}=0.24s(+41.2\%)\)} \\ \hline
+\end{tabular}
+\newline \vspace*{0.5cm} \newline
+\begin{tabular}{|c||c|c|c|}
+    \cline{2-4}
+    \multicolumn{1}{c||}{} & Random forest & SVM & GTB \\
+    \hline \hline
+    CNN & \tworowcell{\(Q=91.4\%(-0.8\%)\)}{\(T_{train}=5.6s(-64.5\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    BBC & \tworowcell{\(Q=84\%(-1.6\%)\)}{\(T_{train}=3.2s(-65.6\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    CNN-IBN & \tworowcell{\(Q=93.9\%(-0.5\%)\)}{\(T_{train}=8.8s(-60.7\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    TIMES NOW & \tworowcell{\(Q=92.6\%(-0.4\%)\)}{\(T_{train}=11.5s(-59.8\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    NDTV & \tworowcell{\(Q=95.3\%(-0.1\%)\)}{\(T_{train}=3.1s(-67.4\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    \end{tabular}
+    \caption{Сводная таблица результатов метода FCNN и базовых методов после применения FCNN}
+    \label{table:fcnn-results}
+\end{table}
 
 \subsection{Class conditioned instance selection}
 \subsection{Instance-based 3}
