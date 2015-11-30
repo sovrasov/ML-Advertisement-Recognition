@@ -17,13 +17,22 @@
  
  
  \subsection*{Результаты применения PCA}
- Лучшие результаты при уменьшении размерности с помошью PCA показал алгоритм random forest.
- \begin{figure} \centering \includegraphics[width=1\textwidth]{images/randforest_NDTV_PCA.png} \caption{Random forest on NDTV } \label{fig:image} \end{figure}
- При одновременном улучшении результата кроссвалидации практически линейно уменьшается время обучения алгоритма.
-  \begin{figure} \centering \includegraphics[width=1\textwidth]{images/randforest_NDTV_PCA_time.png} \caption{Random forest on NDTV train time} \label{fig:image} \end{figure}
-  Применение PCA в сочетании с LDA не дало результата в плане улучшения качества предсказания. Время обучения также уменьшается линейно.
-  \begin{figure} \centering \includegraphics[width=1\textwidth]{images/LDA_NDTV_PCA.png} \caption{LDA on NDTV } \label{fig:image} \end{figure}
-  \begin{figure} \centering \includegraphics[width=1\textwidth]{images/LDA_NDTV_PCA_time.png} \caption{LDA on NDTV train time} \label{fig:image} \end{figure}
-  \par
+ Лучшие результаты при уменьшении размерности с помошью PCA показал алгоритм random forest. С уменьшением размерности задачи растёт доля верных предсказаний (на рис. \ref{fig:randfor_scores} показаны графики 
+ зависимости качества обучения алгоритма на разных каналах).
+ При одновременном улучшении результата кроссвалидации практически линейно уменьшается время обучения алгоритма (рис. \ref{fig:randfor_times}). Оптимальное число признаков для алгоритма random forest с точки зрения сочетания качества обучения и затраченного времени --- 50.
+ 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/randforest_PCA_scores.png}
+    \caption{Random forest scores.}
+    \label{fig:randfor_scores}
+\end{figure} 
+ 
+ \begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/randforest_PCA_time.png}
+    \caption{Random forest train time.}
+    \label{fig:randfor_times}
+\end{figure} 
   
   
