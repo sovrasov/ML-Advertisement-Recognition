@@ -13,6 +13,9 @@ if sklearn.__version__ < '0.17':
 else:
     from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn import neighbors
+from sklearn.svm import SVC
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 def test_method(clf, name):
 
@@ -63,6 +66,10 @@ def test_method(clf, name):
     f.close()
 
 def main():
+    svm = SVC(C=0.5, cache_size=2000, class_weight='auto', kernel='linear')
+    clf = Pipeline([('scaler', StandardScaler()), ('svm', svm)])
+    name = 'SVM'
+    test_method(clf, name)
 
     clf = RandomForestClassifier(n_estimators=60, n_jobs = -1)
     name = 'randforest'
