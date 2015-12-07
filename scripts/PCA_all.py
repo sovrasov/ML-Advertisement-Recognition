@@ -66,7 +66,7 @@ def test_method(clf, name):
     f.close()
 
 def main():
-    svm = SVC(C=0.5, cache_size=2000, class_weight='auto', kernel='linear')
+    svm = SVC(C=4.0, kernel='linear')
     clf = Pipeline([('scaler', StandardScaler()), ('svm', svm)])
     name = 'SVM'
     test_method(clf, name)

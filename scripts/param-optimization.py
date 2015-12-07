@@ -103,7 +103,7 @@ class RandForestOptimizer(OptimizerBase):
 
 class SVMOptimizer(OptimizerBase):
     def __init__(self):
-        super(SVMOptimizer, self).__init__('C', -5, 1, 8.0, scale='log')
+        super(SVMOptimizer, self).__init__('C', -1, 5, 2.0, scale='log')
         self._clfclass = SVC
         self._method_name = 'svm'
 
