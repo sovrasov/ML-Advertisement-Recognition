@@ -31,7 +31,7 @@ def main():
             { 'clf': KNeighborsClassifier(n_neighbors=15), 'name': 'KNN' },
             { 'clf': LDA(), 'name': 'LDA' },
             { 'clf': Pipeline([('scaler', StandardScaler()),
-                ('svm', SVC(C=4.0, kernel='linear'))]), 'name': 'SVM' },
+                ('svm', SVC(C=4.0))]), 'name': 'SVM' },
             { 'clf': RandomForestClassifier(n_estimators=60),
                 'name': 'randforest' },
             { 'clf': GradientBoostingClassifier(n_estimators=100),
