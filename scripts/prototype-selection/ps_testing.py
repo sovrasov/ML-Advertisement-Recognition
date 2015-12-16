@@ -39,9 +39,17 @@ def main():
     )
 
     timer = clock if platform == 'win32' else time
-    ps_method_function = PS.cnn_reduce if ps_method == 'cnn' else PS.fcnn_reduce
 
-    for ps_param in (1, 5, 10, 15):
+    if ps_method == 'cnn':
+        ps_method_function = PS.cnn_reduce
+    elif ps_method == 'fcnn':
+        ps_method_function = PS.fcnn_reduce
+    else:
+        ps_method_function = PS.ccis_reduce
+
+    param_range = (1,) if ps_method == 'ccis' else (1, 5, 10, 15)
+
+    for ps_param in param_range:
         for channel in channels:
             X, y = load_svmlight_file('../../Dataset/{}.txt'.format(channel))
             X = VarianceThreshold().fit_transform(X)

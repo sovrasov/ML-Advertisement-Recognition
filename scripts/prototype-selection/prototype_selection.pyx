@@ -26,6 +26,11 @@ cdef class PrototypeSelector:
         ds_reduced = cpsmethods.cnn_reduce(self.ds, n_neighbors)
         return self._to_numpy_arrays(ds_reduced)
 
+    def ccis_reduce(self, int n_neighbors):
+        cdef cpsmethods.Dataset ds_reduced
+        ds_reduced = cpsmethods.ccis_reduce(self.ds)
+        return self._to_numpy_arrays(ds_reduced)
+
     cdef cpsmethods.Dataset _out_of_numpy_arrays(self,
             np.ndarray[np.float_t, ndim=2] X, np.ndarray[np.int_t] y):
         cdef int n_features = X.shape[1]
