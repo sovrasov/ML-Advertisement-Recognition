@@ -135,7 +135,7 @@ Dataset ccis_reduce(Dataset ds)
 	int *within_in_degrees, *between_in_degrees;
 	int total_within_in_degree, total_between_in_degree;
 	CCNNInstance* scored_instances;
-	int k0, upper_bound;
+	int half_epsilon_A, k0, upper_bound;
 	int *Sprev_within, *Sprev_between, *S1_within, *S1_between;
 	int *S, *Sf, *S1;
 	int S_size, Sf_size, S1_size, St_size;
@@ -210,7 +210,8 @@ Dataset ccis_reduce(Dataset ds)
 
     qsort(scored_instances, ds.n_instances, sizeof(CCNNInstance),
             compare_ccnn_instances);
-    k0 = (int)fmax(n_classes, ceil(epsilon_A * 0.5));
+	half_epsilon_A = (int)ceil(epsilon_A * 0.5);
+	k0 = (n_classes > half_epsilon_A) ? n_classes : half_epsilon_A;
 
     // add to S k0 instances with highest scores
 	S = malloc(sizeof(int) * ds.n_instances);

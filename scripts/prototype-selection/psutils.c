@@ -80,8 +80,11 @@ Dataset alloc_dataset(int n_features, int n_instances)
 {
     flpoint* X = malloc(sizeof(flpoint) * n_features * n_instances);
     int* y = malloc(sizeof(int) * n_instances);
-    Dataset ds = { .n_features = n_features, .n_instances = n_instances,
-        .X = X, .y = y };
+    Dataset ds;
+   	ds.n_features = n_features;
+	ds.n_instances = n_instances;
+    ds.X = X;
+	ds.y = y;
     return ds;
 }
 
