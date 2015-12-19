@@ -22,7 +22,7 @@ for method in methods:
  	elif channel == 'CNN':
 	 style = 'c'
 	 label = "CNN"
- 	elif channel == 'CNN-IBN':
+ 	elif channel == 'CNNIBN':
 	 style = 'r'
 	 label = 'CNN-IBN'
  	elif channel == 'NDTV':
@@ -31,7 +31,7 @@ for method in methods:
  	elif channel == 'TIMESNOW':
 	 style = 'y'
 	 label = 'TIMES NOW'
-	line_10 = plt.plot(params, np.array(time_means), style + '-o', label = channel)
+	line_10 = plt.plot(params, np.array(time_means), style + '-o', label = label)
    plt.grid()
    plt.legend(loc = 'best', fontsize = 10)
    plt.savefig('Pictures/PCA-{}Time.png'.format(method), format = 'png', dpi = 300)
