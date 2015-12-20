@@ -7,7 +7,7 @@
  с 4125 до около 230 переменных (227-229 в зависимости от канала). Такая ситуация произошла из-за использования схемы Bag of Words при создании датасета. 
  \subsection{PCA}
  Для дальнейшего уменьшения количества признаков использовался метод главных компонент
- (principal component analysis или PCA). Этот метод позволяет снизить размерность оптимальным с точки зрения некоторого критерия образом. Рассмотрим его подробнее.
+ (principal component analysis или PCA)\cite{pearson}. Этот метод позволяет снизить размерность оптимальным с точки зрения некоторого критерия образом. Рассмотрим его подробнее.
  \par
  Постановка задачи, решаемой в методе PCA звучит следующим образом: найти линейное многообразие заданной 
  размерности, сумма квадратов расстояний до которого от данной системы точек минимальна. Стоит обратить внимание на то, что информация о принадлежности точек к какому-либо классу здесь не учитывается.
@@ -17,22 +17,87 @@
  
  
  \subsection*{Результаты применения PCA}
- Лучшие результаты при уменьшении размерности с помошью PCA показал алгоритм random forest. С уменьшением размерности задачи растёт доля верных предсказаний (на рис. \ref{fig:randfor_scores} показаны графики 
+ Эксперименты по подбору оптимальной размерности проводились следующим образом: перебирались все значения 
+ размерности редуцированных данных начиная от 10 с шагом в 10 и проводилась кросс-валидация с параметром разбиения 10. Эта процедура была проведена для каждого канала и для каждого метода. Параметры методов 
+ взяты из секции \ref{sec:base-methods}.
+\par
+Метод \(k\) ближайших соседей оказался нечувствителен к снижению размерности данных. Качество классификации не меняется, возможно, из-за того, что PCA в условиях данной задачт достаточно хорошо сохраняет локальную структуру пространства признаков. Время обучения метода \(k\)NN мало, поэтому PCA
+имеет смысл применять для уменьшения объёма данных, которые хранит метод для своей работы.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/PCA-kNN.png}
+    \caption{\(k\)NN scores with PCA}
+    \label{fig:knn_pca_scores}
+\end{figure} 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/PCA-kNNTime.png}
+    \caption{\(k\)NN learning times with PCA}
+    \label{fig:knn_pca_times}
+\end{figure} 
+\par
+Линейный дискриминантынй анализ в сочетании с PCA показал ухудшение результатов. Время обучения этого метода мало, так что редукция размерности в данном случае оказалась бесполезной.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/PCA-LDA.png}
+    \caption{LDA scores with PCA}
+    \label{fig:lda_pca_scores}
+\end{figure} 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/PCA-LDATime.png}
+    \caption{LDA learning times with PCA}
+    \label{fig:lda_pca_times}
+\end{figure} 
+\par
+Наилучшего результата с точки зрения качества классификации удалось достичь с помощью машины опорных векторов и снижения размерности до 50 или 60, в зависимости от канала. Кроме того, при меньшей размерности значительно падает время работы SVM.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/PCA-SVM.png}
+    \caption{SVM scores with PCA}
+    \label{fig:svm_pca_scores}
+\end{figure} 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/PCA-SVMTime.png}
+    \caption{SVM learning times with PCA}
+    \label{fig:svm_pca_times}
+\end{figure} 
+\par
+ Хорошие результаты при уменьшении размерности с помошью PCA показал алгоритм random forest. С уменьшением размерности задачи растёт доля верных предсказаний (на рис. \ref{fig:randfor_pca_scores} показаны графики 
  зависимости качества обучения алгоритма на разных каналах).
- При одновременном улучшении результата кроссвалидации практически линейно уменьшается время обучения алгоритма (рис. \ref{fig:randfor_times}). Оптимальное число признаков для алгоритма random forest с точки зрения сочетания качества обучения и затраченного времени --- 50.
+ При одновременном улучшении результата кросс-валидации практически линейно уменьшается время обучения алгоритма (рис. \ref{fig:randfor_pca_times}). Оптимальное число признаков для алгоритма random forest с точки зрения сочетания качества обучения и затраченного времени --- 50 или 60 в зависимости от канала.
  
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\textwidth]{images/randforest_PCA_scores.png}
-    \caption{Random forest scores.}
-    \label{fig:randfor_scores}
+    \includegraphics[width=0.5\textwidth]{images/PCA-randfor.png}
+    \caption{Random forest scores with PCA}
+    \label{fig:randfor_pca_scores}
 \end{figure} 
  
  \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\textwidth]{images/randforest_PCA_time.png}
-    \caption{Random forest train time.}
-    \label{fig:randfor_times}
+    \includegraphics[width=0.5\textwidth]{images/PCA-randforTime.png}
+    \caption{Random forest learning times with PCA}
+    \label{fig:randfor_pca_times}
 \end{figure} 
-  
-  
+  \par
+  Ещё одним методом, слабо чувствительным к применению PCA стал градиентый бустинг деревьев. PCA в таком случае можно использовать чтобы снизить время обучения модели. Из рис. \ref{fig:gtb_pca_times} можно увидеть, что при снижении размерности данных в 2 раз время обучения падает тоже примерно в 2 раза.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/PCA-GTB.png}
+    \caption{Gradient tree boosting scores with PCA}
+    \label{fig:gtb_pca_scores}
+\end{figure} 
+ 
+ \begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/PCA-GTBTime.png}
+    \caption{Gradient tree boosting learning times with PCA}
+    \label{fig:gtb_pca_times}
+\end{figure}
+\par
