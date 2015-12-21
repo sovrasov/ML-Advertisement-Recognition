@@ -134,7 +134,7 @@ class LDAOptimizer(object):
             clf.fit(X_train.toarray(), y_train)
             t0 = self._timer()
             scores.append(clf.score(X_test.toarray(), y_test))
-            train_times.append(t0 - self._timer())
+            train_times.append(self._timer() - t0)
 
         self._mean_score = np.mean(scores)
         self._score_std = np.var(scores)

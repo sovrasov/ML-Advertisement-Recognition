@@ -122,16 +122,19 @@ LDA в отличие от остальных рассматриваемых м�
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{|c||c|c|c|c|c|}
-    \cline{2-6}
-    \multicolumn{1}{c||}{} & \(k\)NN & LDA & Random forest & SVM & GTB \\
-    \hline \hline
-    CNN & \tworowcell{\(Q=78\%\)}{\(T_{train}=0.32 s\)} & \tworowcell{\(Q=90.4\%\)}{\(T_{train}=0.006 s\)} & \tworowcell{\(Q=92.2\%\)}{\(T_{train}=15.8 s\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
-    BBC & \tworowcell{\(Q=77.2\%\)}{\(T_{train}=0.37 s\)} & \tworowcell{\(Q=84.2\%\)}{\(T_{train}=0.003 s\)} & \tworowcell{\(Q=85.4\%\)}{\(T_{train}=9.3 s\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
-    CNN-IBN & \tworowcell{\(Q=79.6\%\)}{\(T_{train}=0.6s\)} & \tworowcell{\(Q=91.8\%\)}{\(T_{train}=0.1s\)} & \tworowcell{\(Q=94.4\%\)}{\(T_{train}=22.4s\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
-    TIMES NOW & \tworowcell{\(Q=76.1\%\)}{\(T_{train}=0.67s\)} & \tworowcell{\(Q=91.7\%\)}{\(T_{train}=0.1s\)} & \tworowcell{\(Q=93\%\)}{\(T_{train}=28.6s\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
-    NDTV & \tworowcell{\(Q=83.8\%\)}{\(T_{train}=1.15s\)} & \tworowcell{\(Q=93.3\%\)}{\(T_{train}=0.17s\)} & \tworowcell{\(Q=95.4\%\)}{\(T_{train}=9.5s\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+    \begin{tabular}{|c||c|c|c|}
+		\cline{2-4}
+		\multicolumn{1}{c||}{} & \(k\)NN & LDA & SVM \\
+		\hline \hline
+		\input{base-table1.txt}
     \end{tabular}
+\newline \vspace*{0.5cm} \newline
+	\begin{tabular}{|c||c|c|}
+		\cline{2-3}
+		\multicolumn{1}{c||}{} & Random forest & GTB \\
+		\hline \hline
+		\input{base-table2.txt}
+	\end{tabular}
     \caption{Сводная таблица результатов базовых методов}
     \label{table:base-all}
 \end{table}
