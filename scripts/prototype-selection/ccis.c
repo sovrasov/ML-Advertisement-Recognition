@@ -11,31 +11,20 @@ int loo_score(Dataset ds, int n_classes, int* class_labels, int* S_elements,
 {
     int i, j;
     int result = 0;
-    for (i = 0; i < S_size; i++)
+    for (i = 0; i < ds.n_instances; i++)
     {
-		int i_index = (S_elements == NULL) ? i : S_elements[i];
         int nearest = -1;
         int nearest_class = -1;
         flpoint min_squared_dist = DBL_MAX;
 
-        for (j = 0; j < i; j++)
+        for (j = 0; j < S_size; j++)
         {
 			int j_index = (S_elements == NULL) ? j : S_elements[j];
-            flpoint current_squared_dist = squared_dist(ds.n_features,
-                    ds.X + i_index * ds.n_features,
-                    ds.X + j_index * ds.n_features);
-            if (current_squared_dist < min_squared_dist)
-            {
-                min_squared_dist = current_squared_dist;
-                nearest = j_index;
-            }
-        }
+			if (i == j_index)
+				continue;
 
-        for (j = i + 1; j < S_size; j++)
-        {
-			int j_index = (S_elements == NULL) ? j : S_elements[j];
             flpoint current_squared_dist = squared_dist(ds.n_features,
-                    ds.X + i_index * ds.n_features,
+                    ds.X + i * ds.n_features,
                     ds.X + j_index * ds.n_features);
             if (current_squared_dist < min_squared_dist)
             {
