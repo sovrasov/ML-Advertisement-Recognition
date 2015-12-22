@@ -80,7 +80,7 @@ void compute_degrees(Dataset ds, int S_size, const int* S, int n_classes,
         for (j = 0; j < n_classes; j++)
         {
             int current_nn = graph[i * n_classes + j];
-            if (current_nn <= 0)
+            if (current_nn < 0)
 				continue;
             if (class_labels[j] == ds.y[S[i]])
                 within[current_nn]++;
@@ -129,7 +129,7 @@ Dataset ccis_reduce(Dataset ds)
 	int *S, *Sf, *S1;
 	int S_size, Sf_size, S1_size, St_size;
 	int epsilon_A, epsilon_temp, epsilon_S, epsilon_Sf, epsilon_Sf_plus_St;
-	int St_index;
+	int St_index, S1_index;
 	Dataset ds_reduced;
 
     count_classes(ds, &n_classes, &class_labels);
@@ -174,7 +174,7 @@ Dataset ccis_reduce(Dataset ds)
         for (j = 0; j < n_classes; j++)
         {
             int current_nn = ccnn_graph[i * n_classes + j];
-            if (current_nn <= 0) continue;
+            if (current_nn < 0) continue;
             if (class_labels[j] == ds.y[i])
             {
                 within_in_degrees[current_nn]++;
@@ -232,18 +232,18 @@ Dataset ccis_reduce(Dataset ds)
     }
 
 	// THIN method
-	Sprev_within = malloc(sizeof(int) * ds.n_instances);
-	memset(Sprev_within, 0, sizeof(int) * ds.n_instances);
-	Sprev_between = malloc(sizeof(int) * ds.n_instances);
-	memset(Sprev_between, 0, sizeof(int) * ds.n_instances);
-	S1_within = malloc(sizeof(int) * ds.n_instances);
-	S1_between = malloc(sizeof(int) * ds.n_instances);
+	Sprev_within = malloc(sizeof(int) * S_size);
+	memset(Sprev_within, 0, sizeof(int) * S_size);
+	Sprev_between = malloc(sizeof(int) * S_size);
+	memset(Sprev_between, 0, sizeof(int) * S_size);
+	S1_within = malloc(sizeof(int) * S_size);
+	S1_between = malloc(sizeof(int) * S_size);
 
 	compute_degrees(ds, S_size, S, n_classes, class_labels, Sprev_within,
 			Sprev_between);
 
-	Sf = malloc(sizeof(int) * ds.n_instances);
-	S1 = malloc(sizeof(int) * ds.n_instances);
+	Sf = malloc(sizeof(int) * S_size);
+	S1 = malloc(sizeof(int) * S_size);
 	Sf_size = 0;
 	S1_size = 0;
 	// Splitting S into Sf and S1
@@ -256,16 +256,18 @@ Dataset ccis_reduce(Dataset ds)
 	while (TRUE)
 	{
 		int* temp;
-		memset(S1_within, 0, sizeof(int) * ds.n_instances);
-		memset(S1_between, 0, sizeof(int) * ds.n_instances);
+		memset(S1_within, 0, sizeof(int) * S_size);
+		memset(S1_between, 0, sizeof(int) * S_size);
 		compute_degrees(ds, S1_size, S1, n_classes, class_labels, S1_within,
 				S1_between);
 		St_size = 0;
 		for (i = 0; i < S1_size; i++)
 			if (S1_between[S1[i]] > 0 &&
-					(Sprev_between[S1[i]] > 0 ||
-					 Sprev_within[S1[i]] > 0))
-				Sf[Sf_size + St_size++] = S1[i];
+					(Sprev_between[S1[i]] + Sprev_within[S1[i]] > 0))
+			{
+				Sf[Sf_size + St_size] = S1[i];
+				St_size++;
+			}
 
 		epsilon_Sf = loo_score(ds, n_classes, class_labels,
 				Sf, Sf_size);
@@ -282,23 +284,20 @@ Dataset ccis_reduce(Dataset ds)
 		temp = Sprev_between;
 		Sprev_between = S1_between;
 		S1_between = temp;
+
 		// S1 := S - Sf which is equivalent to filtering out St elements
 		// from S1
 		St_index = 0;
-		i = 0;
-		while (i < S1_size)
+		S1_index = 0;
+		for (i = 0; i < S1_size; i++)
 		{
 			if (St_index < St_size && S1[i] == Sf[Sf_size + St_index])
-			{
-				if (i + 1 != S1_size)
-					S1[i] = S1[i + 1];
-
-				S1_size--;
 				St_index++;
-			}
 			else
-				i++;
+				S1[S1_index++] = S1[i];
 		}
+		S1_size = S1_index;
+
 		// Sf := Sf + St
 		Sf_size = Sf_size + St_size;
 	}
