@@ -9,7 +9,7 @@ from sys import platform
 from sklearn.cross_validation import StratifiedKFold
 
 
-def do_randfor_selection(clf, X, y, n_features):
+def do_randfor_selection(clf, X, y, n_features, selector_output):
 
     timer = clock if platform == 'win32' else time
     scores = []
@@ -19,28 +19,29 @@ def do_randfor_selection(clf, X, y, n_features):
     for i in range(0, len(n_features)):
         print('Do selection with ' + str(n_features[i]) + ' features...')
 
-        selector = RandomForestClassifier(n_estimators=40, n_jobs = 1)
-        selector.fit(X, y)
-
-        features = list()
         importances = list()
 
         for j in range (0, X.shape[1]):
-            importances.append(selector.feature_importances_[j])
+            importances.append(selector_output[j])
+            #print('{} : {}'.format(j, importances[j]))
 
         importances_sorted = sorted(importances)
-        treshold_weight = importances_sorted[n_features[i] - 1]
-
+        treshold_weight = importances_sorted[X.shape[1] - n_features[i]]
         mask = list()
         for j in range (0, X.shape[1]):
             mask.append(False)
         mask = np.array(mask)
 
+        features = list()
         for j in range (0, X.shape[1]):
-            if importances[i] > treshold_weight and len(features) <= n_features[i]:
+            #print('imp {} tresh {}'.format(importances[i], treshold_weight))
+            if importances[j] >= treshold_weight and len(features) < n_features[i]:
+                #print('feature appended!')
                 features.append(j)
                 mask[j] = True
-                
+
+        #print(treshold_weight)
+        #print(len(features))
         Xt = np.transpose(X)
         Xt = Xt[mask]
         X_R = np.transpose(Xt)

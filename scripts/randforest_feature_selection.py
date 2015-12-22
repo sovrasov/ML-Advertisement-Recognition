@@ -19,29 +19,34 @@ from sklearn.preprocessing import StandardScaler
 def test_method(clf, name):
 
     channels = ( 'NDTV', 'TIMESNOW', 'CNNIBN', 'CNN', 'BBC' )
-    f = open('r_selection_results_{}.txt'.format(name), 'w')
 
     for channel in channels:
-        print('\nProcessing channel {}'.format(channel))
-        f.write('\nProcessing channel {}\n'.format(channel))
+        print('\nProcessing channel {} with method {}'.format(channel, name))
+        #f.write('\nProcessing channel {}\n'.format(channel))
         X, y = get_small_data(channel)
 
         n_features = list()
         for i in range(1,21):
             n_features.append(i*10)
-        n_features.append(227)
+        n_features.append(X.shape[1])
+
+        selector = RandomForestClassifier(n_estimators=60)
+        selector.fit(X, y)
 
         t0 = time.clock()
-        result = do_randfor_selection(clf, X.toarray(), y, n_features)
+        result = do_randfor_selection(clf, X.toarray(), y, n_features, selector.feature_importances_)
         testTime = time.clock() - t0
         print('Total time: ' + str(testTime))
         scores = result[0]
         scores_std = result[1]
         times = result[2]
 
-        f.write('N_features; mean_score; std error; mean training time\n')
+        f = open('RFS-{}-{}.log'.format(name, channel), 'at')
+        #f.write('N_features; mean_score; std error; mean training time\n')
         for i in range(0, len(n_features)):
             f.write('{}; {}; {}; {}\n'.format(n_features[i], scores[i], scores_std[i], times[i]))
+
+        f.close()
 
         plt.clf()
         plt.plot(n_features, scores)
@@ -62,17 +67,7 @@ def test_method(clf, name):
         plt.xlabel('Parameter N')
         plt.savefig('{}_{}_r_selection_time.png'.format(name, channel))
 
-    f.close()
-
 def main():
-    svm = SVC(C=4.0)
-    clf = Pipeline([('scaler', StandardScaler()), ('svm', svm)])
-    name = 'SVM'
-    test_method(clf, name)
-
-    clf = RandomForestClassifier(n_estimators=60, n_jobs = -1)
-    name = 'randforest'
-    test_method(clf, name)
 
     clf = LDA()
     name = 'LDA'
@@ -80,6 +75,16 @@ def main():
 
     clf = neighbors.KNeighborsClassifier(n_neighbors = 15)
     name = 'KNN'
+    test_method(clf, name)
+
+    svm = SVC(C=4.0)
+    clf = Pipeline([('scaler', StandardScaler()), ('svm', svm)])
+    name = 'SVM'
+    test_method(clf, name)
+
+    
+    clf = RandomForestClassifier(n_estimators=60)
+    name = 'randforest'
     test_method(clf, name)
 
     clf = GradientBoostingClassifier(n_estimators=100)
