@@ -6,7 +6,9 @@
 
 void swap_ints(int* a, int* b)
 {
-    *a = *a ^ *b ^ (*b = *a);
+	int temp = *b;
+	*b = *a;
+	*a = temp;
 }
 
 void shuffle_ints(int N, int* array)

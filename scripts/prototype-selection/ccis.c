@@ -192,10 +192,12 @@ Dataset ccis_reduce(Dataset ds)
     scored_instances = malloc(sizeof(CCNNInstance) *
             ds.n_instances);
     for (i = 0; i < ds.n_instances; i++)
+	{
         scored_instances[i].index = i;
         scored_instances[i].score = ccnn_score(
 					(flpoint)within_in_degrees[i] / total_within_in_degree,
 					(flpoint)between_in_degrees[i] / total_between_in_degree);
+	}
 
     qsort(scored_instances, ds.n_instances, sizeof(CCNNInstance),
             compare_ccnn_instances);
@@ -232,12 +234,12 @@ Dataset ccis_reduce(Dataset ds)
     }
 
 	// THIN method
-	Sprev_within = malloc(sizeof(int) * S_size);
-	memset(Sprev_within, 0, sizeof(int) * S_size);
-	Sprev_between = malloc(sizeof(int) * S_size);
-	memset(Sprev_between, 0, sizeof(int) * S_size);
-	S1_within = malloc(sizeof(int) * S_size);
-	S1_between = malloc(sizeof(int) * S_size);
+	Sprev_within = malloc(sizeof(int) * ds.n_instances);
+	memset(Sprev_within, 0, sizeof(int) * ds.n_instances);
+	Sprev_between = malloc(sizeof(int) * ds.n_instances);
+	memset(Sprev_between, 0, sizeof(int) * ds.n_instances);
+	S1_within = malloc(sizeof(int) * ds.n_instances);
+	S1_between = malloc(sizeof(int) * ds.n_instances);
 
 	compute_degrees(ds, S_size, S, n_classes, class_labels, Sprev_within,
 			Sprev_between);
