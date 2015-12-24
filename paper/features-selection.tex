@@ -1,7 +1,7 @@
 \section{Отбор признаков}
 Основные цели отбора признаков --- уменьшение размерности задачи, а также выявление и отбрасывание признаков, не несущих полезной для решения задачи информации. Снижение размерности также ведёт к уменьшению времени обучения алгоритмов и уменьшению размера, занимаемого тренировочной выборкой.
  \par
-Для рассматриваемого набора данных большая часть переменных не меняет значений на всех объектах выборки, поэтому все признаки с нулевой дисперсией были отброшены. В результате размерностьзадачи была сокращена с 4125 до около 230 переменных (227-229 в зависимости от канала). Такая ситуация произошла из-за использования схемы Bag of Words при создании датасета.
+Для рассматриваемого набора данных большая часть переменных не меняет значений на всех объектах выборки, поэтому все признаки с нулевой дисперсией были отброшены. В результате размерность задачи была сокращена с 4125 до около 230 переменных (227-229 в зависимости от канала). Такая ситуация произошла из-за использования схемы Bag of Words при создании датасета.
 \subsection{PCA}
 Для дальнейшего уменьшения количества признаков использовался метод главных компонент (principal component analysis или PCA)\cite{pearson}. Этот метод позволяет снизить размерность оптимальным с точки зрения некоторого критерия образом. Рассмотрим его подробнее.
  \par
@@ -19,11 +19,11 @@
     \centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/PCA-kNN.png}
-		\caption{\(k\)NN scores with PCA}
+		\caption{Зависимости качества классификации от размерности PCA}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/PCA-kNNTime.png}
-		\caption{\(k\)NN learning times with PCA}
+		\caption{Зависимости времён обучени от размерности PCA}
 	\end{subfigure}
 	\caption{Результаты для метода \(k\)NN}\label{fig:knn_pca}
 \end{figure}
@@ -35,11 +35,11 @@
     \centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/PCA-LDA.png}
-		\caption{LDA scores with PCA}
+		\caption{Зависимости качества классификации от размерности PCA}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/PCA-LDATime.png}
-		\caption{LDA learning times with PCA}
+		\caption{Зависимости времён обучения от размерности PCA}
 	\end{subfigure}
 	\caption{Результаты для метода LDA}\label{fig:lda_pca}
 \end{figure}
@@ -51,11 +51,11 @@
     \centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/PCA-SVM.png}
-		\caption{SVM scores with PCA}
+		\caption{Зависимости качества классификации от размерности PCA}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/PCA-SVMTime.png}
-		\caption{SVM learning times with PCA}
+		\caption{Зависимости времён обучения от размерности PCA}
 	\end{subfigure}
 	\caption{Результаты для метода SVM}\label{fig:svm_pca}
 \end{figure}
@@ -69,38 +69,39 @@
     \centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/PCA-randfor.png}
-		\caption{Random forest scores with PCA}
+		\caption{Зависимости качества классификации от размерности PCA}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/PCA-randforTime.png}
-		\caption{Random forest learning times with PCA}
+		\caption{Зависимости времён обучения от размерности PCA}
 	\end{subfigure}
 	\caption{Результаты для метода random forest}\label{fig:randfor_pca}
 \end{figure} 
  
 \par
-Ещё одним методом, слабо чувствительным к применению PCA стал градиентый бустинг деревьев. PCA в таком случае можно использовать чтобы снизить время обучения модели. Из рис. \ref{fig:gtb_pca} можно увидеть, что при снижении размерности данных в 2 раз время обучения падает тоже примерно в 2 раза.
+Ещё одним методом, слабо чувствительным к применению PCA стал градиентый бустинг деревьев решений. PCA в таком случае можно использовать чтобы снизить время обучения модели. Из рис. \ref{fig:gtb_pca} можно увидеть, что при снижении размерности данных в 2 раз время обучения падает тоже примерно в 2 раза.
 
 \begin{figure}[h!]
     \centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/PCA-GTB.png}
-		\caption{Gradient tree boosting scores with PCA}
+		\caption{Зависимости качества классификации от размерности PCA}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/PCA-GTBTime.png}
-		\caption{Gradient tree boosting learning times with PCA}
+		\caption{Зависимости времён обучения от размерности PCA}
 	\end{subfigure}
 	\caption{Результаты для метода Gradient tree boosting}\label{fig:gtb_pca}
 \end{figure}
 
 \par
 \subsection{Отбор признаков с помощью ансамблей деревьев решений}
-Идея о том, что с помощью случайного леса можно для каждого признака можно оценить его важность была высказана в статье Бреймана \cite{breiman}.
+Идея о том, что с помощью случайного леса можно для каждого признака оценить его важность была высказана в статье Бреймана \cite{breiman}.
 \par
 Первые шаг в оценке важности переменной в тренировочной выборке --- обучение случайного леса на этих данных. Во время процесса построения модели для каждого элемента тренировочного набора вычисляется out-of-bag-ошибка.
-OOB error --- это доля примеров обучающей выборки, неправильно классифицируемых лесом, если не учитывать голоса деревьев на примерах, входящих в их собственную бутстрап подвыборку.
+Out-of-bag-ошибка --- это доля примеров обучающей выборки, неправильно классифицируемых лесом, если не учитывать голоса деревьев на примерах, входящих в их собственную бутстрап подвыборку.
 Для того, чтобы оценить важность j-го признака после тренировки, значения j-го параметра перемешиваются для всех записей тренировочного набора и out-of-bag-ошибка считается снова. Важность признака оценивается путем усреднения по всем деревьям разности показателей out-of-bag-ошибок до и после перемешивания значений. При этом значения таких ошибок нормализуются на среднеквадратическое отклонение разностей.
+\par
 После этого осуществляется отсечение признаков с низким весом по заданному порогу. Можно также выбирать k самых важных признаков, что и будет делаться далее.
 \subsubsection*{Результаты отбора признаков с помощью случайного леса}
 В качестве классификатора для оценки важности признаков выступает случайный лес из 60-ти деревьев. Схема экспериментов такая же, как с PCA. Из-за недостатка времени эксперименты не были проведены полностью (результаты методов SVM и GTB получены для двух каналов), однако их достаточно, чтобы сказать, что отбор по важности проявил себя не хуже, чем PCA.
@@ -111,75 +112,75 @@ OOB error --- это доля примеров обучающей выборки
     \centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/RFS-kNN.png}
-		\caption{\(k\)NN scores with RFS}
+		\caption{Зависимости качества классификации от количества признаков}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/RFS-kNNTime.png}
-		\caption{\(k\)NN learning times with RFS}
+		\caption{Зависимости времён обучения от количества признаков}
 	\end{subfigure}
 	\caption{Результаты для метода \(k\)NN}\label{fig:knn_rfs}
 \end{figure}
 
 \par
-Как и в случае с PCA, качество классификации линейного дискриминантного анализа монотонно ухудшается при снижении размерности данных (рис. \ref{fig:lda_rfs}).
+Как и в случае с PCA, качество классификации линейного дискриминантного анализа монотонно ухудшается при снижении размерности данных (рис. \ref{fig:lda_rfs}). Применение отбора в этом случае бесперспективно, так как время обучения метода мало даже для нередуцированных данных.
 
 \begin{figure}[h!]
     \centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/RFS-LDA.png}
-		\caption{LDA scores with RFS}
+		\caption{Зависимости качества классификации от количества признаков}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/RFS-LDATime.png}
-		\caption{LDA learning times with RFS}
+		\caption{Зависимости времён обучения от количества признаков}
 	\end{subfigure}
 	\caption{Результаты для метода LDA}\label{fig:lda_rfs}
 \end{figure}
 
 \par
-Результаты, полученные на части данных показывают, что качество классификации SVM можно повысить путём отбора признаков с момощью случайного леса. Оптимальное значение количества признаков --- 100 или 110 в зависимости от данных.
+Результаты, полученные на части данных показывают, что качество классификации SVM можно повысить путём отбора признаков с помощью случайного леса. Оптимальное значение количества признаков --- 100 или 110 в зависимости от канала. Время обучения при такой редукции падает примерно в два раза.
 
 \begin{figure}[h!]
     \centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/RFS-SVM.png}
-		\caption{SVM scores with RFS}
+		\caption{Зависимости качества классификации от количества признаков}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/RFS-SVMTime.png}
-		\caption{SVM learning times with RFS}
+		\caption{Зависимости времён обучения от количества признаков}
 	\end{subfigure}
 	\caption{Результаты для метода SVM}\label{fig:svm_rfs}
 \end{figure}
 
 \par
-Отбор признаков практически не влияет на качество классификации случайного леса (рис. \ref{fig:randfor_rfs}), поэтому делать это имеет  смысл для уменьшения времени работы метода или объема информации, занимаемой тренировочной выборкой.
+Отбор признаков практически не влияет на качество классификации случайного леса (рис. \ref{fig:randfor_rfs}), поэтому делать это имеет  смысл для уменьшения времени работы метода или объема информации, занимаемого тренировочной выборкой.
 
 \begin{figure}[h!]
     \centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/RFS-randforest.png}
-		\caption{Random forest scores with RFS}
+		\caption{Зависимости качества классификации от количества признаков}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/RFS-randforestTime.png}
-		\caption{Random forest learning times with RFS}
+		\caption{Зависимости времён обучения от количества признаков}
 	\end{subfigure}
 	\caption{Результаты для метода random forest}\label{fig:randfor_rfs}
 \end{figure} 
 
 \par
-Ситуация с градиентным бустингом деревьев решений очень похожа на ситуацию со случайным лесом: метод малочувствителен к редукции размерности (рис. \ref{fig:gtb_rfs}).
+Ситуация с градиентным бустингом деревьев решений очень похожа на ситуацию со случайным лесом: метод малочувствителен к редукции размерности в смысле качества классификации (рис. \ref{fig:gtb_rfs}).
 
 \begin{figure}[h!]
     \centering
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/RFS-GTB.png}
-		\caption{Gradient tree boosting scores with RFS}
+		\caption{Зависимости качества классификации от количества признаков}
 	\end{subfigure}
 	\begin{subfigure}{0.45\textwidth}
 		\includegraphics[width=\textwidth]{images/RFS-GTBTime.png}
-		\caption{Gradient tree boosting learning times with RFS}
+		\caption{Зависимости времён обучения от количества признаков}
 	\end{subfigure}
 	\caption{Результаты для метода Gradient tree boosting}\label{fig:gtb_rfs}
 \end{figure}
