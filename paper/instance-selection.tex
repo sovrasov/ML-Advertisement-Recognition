@@ -236,3 +236,22 @@ CCIS \cite{marchiori} отличается от двух предыдущих м
 
 Прорежение призвано отфильтровать \(S\), оставив объекты, наиболее важные для определения границы классов. Для этого из \(S\) выбирается подмножество \(S_f\), состоящее из объектов с положительной междуклассовой полустепенью захода в графе \(G^S\) для выборки \(S\) (эти объекты считаются важными для определения границы между классами). Затем \(S_f\) дополняется объектами из \(S\setminus S_f\) пока LOO-ошибка на \(T\) при использовании \(S\) в качестве обучающей выборки уменьшается.
 
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c||c||c|c|}
+    \cline{2-4}
+    \multicolumn{1}{c||}{} & Сжатие \(T\) & \(k\)NN & LDA \\
+    \hline \hline
+	\input{ccis-table1.txt}
+\end{tabular}
+\newline \vspace*{0.5cm} \newline
+\begin{tabular}{|c||c|c|c|}
+    \cline{2-4}
+    \multicolumn{1}{c||}{} & SVM & Random forest & GTB \\
+    \hline \hline
+	\input{ccis-table2.txt}
+    \end{tabular}
+    \caption{Сводная таблица результатов метода CCIS и базовых методов после применения CCIS}
+    \label{table:ccis-results}
+\end{table}
+

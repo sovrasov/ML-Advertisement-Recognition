@@ -19,7 +19,7 @@ def main():
     channels = ( 'cnn', 'bbc', 'cnnibn', 'timesnow', 'ndtv' )
     channel_names = ( 'CNN', 'BBC', 'CNN-IBN', 'TIMES NOW', 'NDTV' )
 
-    stats_cell_template = '& \\tworowcell{{\(R={:.2f}\\%\\)}}{{\\(T_{{PS}}={:.2f}\\) s}} '
+    stats_cell_template = '& \\tworowcell{{\(R={:.2f}\\%\\)}}{{\\(T_{{PS}}={:.2f}\\) s}} ' if prefix != 'ccis' else '& \\(R={:.2f}\\%\\)'
     cell_template = '& \\tworowcell{{\\(Q={:.2f}\\%\\;({:+.2f}\\%)\\)}}{{\\(T_{{tr}}={:.3f}\\) s \\((\mathrm{{x}}\;{:.3f})\\)}} '
 
     output1 = open('{}-table1.txt'.format(prefix), 'wt')
@@ -28,8 +28,10 @@ def main():
     for channel, channel_name in zip(channels, channel_names):
         table_line = '{} '.format(channel_name)
 
-        with open('{}/../{}-stats/{}-{}-stats.log'.format(red_path,
-            prefix, prefix, channel.upper()), 'rt') as input:
+        stats_path = '{0}/../{1}-stats/{1}-{2}-stats.log' if prefix != 'ccis' else \
+                '{0}/{1}-{2}-stats.log'
+        with open(stats_path.format(red_path, prefix, channel.upper()),
+                'rt') as input:
             _, R, _, Tps, _ = map(float, input.readline().rstrip().split())
         table_line += stats_cell_template.format(R * 100.0, Tps)
 
