@@ -102,11 +102,91 @@
 \end{figure}
 
 \subsection{Отбор признаков с помощью ансамблей деревьев решений}
-Идея о том, что с помощью случайного леса можно для каждого признака можно оценить его важность была высказана в статье Бреймана \cite{breiman}.
+Идея о том, что с помощью случайного леса можно для каждого признака можно оценить его важность была высказана в статье Бреймана \cite{breiman}}.
 \par
 Первые шаг в оценке важности переменной в тренировочной выборке --- обучение случайного леса на этих данных. Во время процесса построения модели для каждого элемента тренировочного набора вычисляется out-of-bag-ошибка.
 OOB error --- это доля примеров обучающей выборки, неправильно классифицируемых лесом, если не учитывать голоса деревьев на примерах, входящих в их собственную бутстрап подвыборку.
 Для того, чтобы оценить важность j-го признака после тренировки, значения j-го параметра перемешиваются для всех записей тренировочного набора и out-of-bag-ошибка считается снова. Важность признака оценивается путем усреднения по всем деревьям разности показателей out-of-bag-ошибок до и после перемешивания значений. При этом значения таких ошибок нормализуются на среднеквадратическое отклонение разностей.
 После этого осуществляется отсечение признаков с низким весом по заданному порогу. Можно также выбирать k самых важных признаков, что и будет делаться далее.
 \subsubsection*{Результаты отбора признаков с помощью случайного леса}
-Схема экспериментов такая же, как с PCA. Из-за недостатка времени эксперименты не были проведены полностью, однако их достаточно, чтобы сказать, что отбор по важности проявил себя не хуже, чем PCA.
+В качестве классификатора для оценки важности признаков выступает случайный лес из 60-ти деревьев. Схема экспериментов такая же, как с PCA. Из-за недостатка времени эксперименты не были проведены полностью (результаты методов SVM и GTB получены для двух каналов), однако их достаточно, чтобы сказать, что отбор по важности проявил себя не хуже, чем PCA.
+\par
+На некоторых каналах метода \(k\) ближайших соседей показывает нехарактерно высокое для него качество классификации при маленьком количестве признаков (рис. \ref{fig:knn_rfs_scores}). Скорее всего, это случайность, так как при дальнейшем увеличении количества признаков качество классификации резко падает и стабилизируется на значении, которое было до редукции размерности.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/RFS-kNN.png}
+    \caption{\(k\)NN scores with RFS}
+    \label{fig:knn_rfs_scores}
+\end{figure} 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/RFS-kNNTime.png}
+    \caption{\(k\)NN learning times with RFS}
+    \label{fig:knn_rfs_times}
+\end{figure} 
+
+\par
+Как и в случае с PCA, качество классификации линейного дискриминантного анализа монотонно ухудшается при снижении размерности данных (рис. \ref{fig:lda_rfs_scores}).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/RFS-LDA.png}
+    \caption{LDA scores with RFS}
+    \label{fig:lda_rfs_scores}
+\end{figure} 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/RFS-LDATime.png}
+    \caption{LDA learning times with RFS}
+    \label{fig:lda_rfs_times}
+\end{figure} 
+\par
+Результаты, полученные на части данных показывают, что качество классификации SVM можно повысить путём отбора признаков с момощью случайного леса. Оптимальное значение количества признаков --- 100 или 110 в зависимости от данных.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/RFS-SVM.png}
+    \caption{SVM scores with RFS}
+    \label{fig:svm_rfs_scores}
+\end{figure} 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/RFS-SVMTime.png}
+    \caption{SVM learning times with RFS}
+    \label{fig:svm_rfs_times}
+\end{figure} 
+
+\par
+Отбор признаков практически не влияет на качество классификации случайного леса, поэтому делать это имеет смысл только для уменьшения время тренировки и объёма тренировочных данных.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/RFS-randforest.png}
+    \caption{Random forest scores with RFS}
+    \label{fig:randfor_rfs_scores}
+\end{figure} 
+ 
+ \begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/RFS-randforestTime.png}
+    \caption{Random forest learning times with RFS}
+    \label{fig:randfor_rfs_times}
+\end{figure} 
+
+\par
+Ситуация с градиентным бустингом деревьев решений очень похожа на ситуацию со случайным лесом: метод малочувствителен к редукции размерности.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/RFS-GTB.png}
+    \caption{Gradient tree boosting scores with RFS}
+    \label{fig:gtb_rfs_scores}
+\end{figure} 
+ 
+ \begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/RFS-GTBTime.png}
+    \caption{Gradient tree boosting learning times with RFS}
+    \label{fig:gtb_rfs_times}
+\end{figure}
+\par
