@@ -15,35 +15,109 @@
 
 Метод CNN был сформулирован для метода одного ближайшего соседа, однако расширение на \(k\) ближайших соседей производится очевидным образом: при классификации очередного элемента \(T\) (а впоследствии \(R\)) используется метод \(k\)NN с обучающей выборкой \(S\). Стоит отметить, что данный метод строит согласованное подмножество только по отношению к методу \(k\) ближайших соседей (для конкретного \(k\)), результирующее подмножество \(S\) не обязано быть согласованным для произвольного алгоритма классификации.
 
-В таблице~\ref{table:cnn-results} приведены результаты применения метода CNN с правилом одного ближайшего соседа. \(R\) и \(T_{PS}\) обозначены процент объектов выборки, оставленный методом CNN, и время работы CNN, соответственно. Как и в таблице~\ref{table:base-all}, \(Q\) означает качество классификации (в скобках указано абсолютное значение, на которое \(Q\) изменилось по сравнению с соответствующим значением в таблице~\ref{table:base-all}), и \(T_{train}\) означает время обучения (в скобках указано относительное значение, на которое изменилось \(T_{train}\) по сравению с той же ячейкой таблицы~\ref{table:base-all}).
+Были проведены эксперименты с методом CNN для \(k\in\{1, 5, 10\}\). На рис.~\ref{fig:cnn-stats} указаны результаты, показанные непосредственно CNN: время работы и доля отобранных объектов. 
+
+\begin{figure}[h!]
+    \centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-stats.png}
+		\caption{Доля отобранных объектов.}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-TimeStats.png}
+		\caption{Время, потраченное на отбор эталонов.}
+	\end{subfigure}
+	\caption{Результаты работы CNN.}\label{fig:cnn-stats}
+\end{figure}
+
+На рис.~\ref{fig:cnn-knn-results}--\ref{fig:cnn-gtb-results} приведены результаты работы базовых методах на обучающих выборках, редуцированных с помощью CNN. \tbd{analysis}
+
+\begin{figure}[h!]
+    \centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-KNN.png}
+		\caption{Качество классификации.}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-KNNTime.png}
+		\caption{Время обучения.}
+	\end{subfigure}
+	\caption{Результаты применения CNN для 15-NN.}\label{fig:cnn-knn-results}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-LDA.png}
+		\caption{Качество классификации.}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-LDATime.png}
+		\caption{Время обучения.}
+	\end{subfigure}
+	\caption{Результаты применения CNN для LDA.}\label{fig:cnn-lda-results}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-SVM.png}
+		\caption{Качество классификации.}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-SVMTime.png}
+		\caption{Время обучения.}
+	\end{subfigure}
+	\caption{Результаты применения CNN для SVM.}\label{fig:cnn-svm-results}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-randforest.png}
+		\caption{Качество классификации.}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-randforestTime.png}
+		\caption{Время обучения.}
+	\end{subfigure}
+	\caption{Результаты применения CNN для Random forest.}\label{fig:cnn-rf-results}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-gradboosting.png}
+		\caption{Качество классификации.}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{images/cnn-gradboostingTime.png}
+		\caption{Время обучения.}
+	\end{subfigure}
+	\caption{Результаты применения CNN для GTB}\label{fig:cnn-gtb-results}
+\end{figure}
+
+В таблице~\ref{table:cnn-results} приведены результаты применения метода CNN при \(k=1\), как наиболее эффективного варианта. \(R\) и \(T_{PS}\) обозначены процент объектов выборки, оставленный методом CNN, и время работы CNN, соответственно. Как и в таблице~\ref{table:base-all}, \(Q\) означает качество классификации (в скобках указано абсолютное значение, на которое \(Q\) изменилось по сравнению с соответствующим значением в таблице~\ref{table:base-all}), и \(T_{train}\) означает время обучения (в скобках указано относительное значение, на которое изменилось \(T_{train}\) по сравению с той же ячейкой таблицы~\ref{table:base-all}).
 \begin{table}[h!]
     \centering
     \begin{tabular}{|c||c||c|c|}
     \cline{2-4}
     \multicolumn{1}{c||}{} & Сжатие \(T\) & \(k\)NN & LDA \\
     \hline \hline
-    CNN & \tworowcell{\(R=32.8\%\)}{\(T_{PS}=55.4s\)} & \tworowcell{\(Q=59.6\%(-18.4\%)\)}{\(T_{train}=0.064s(-99.8\%)\)} & \tworowcell{\(Q=85.2\%(-5.2\%)\)}{\(T_{train}=0.3s(+4900\%)\)} \\ \hline
-    BBC & \tworowcell{\(R=39.3\%\)}{\(T_{PS}=40s\)} & \tworowcell{\(Q=50.2\%(-17\%)\)}{\(T_{train}=0.068s(-81.6\%)\)} & \tworowcell{\(Q=74\%(-10.2\%)\)}{\(T_{train}=0.28s(+9233\%)\)} \\ \hline
-    CNN-IBN & \tworowcell{\(R=30.2\%\)}{\(T_{PS}=113.4s\)} & \tworowcell{\(Q=45.6\%(-34\%)\)}{\(T_{train}=0.11s(-81\%)\)} & \tworowcell{\(Q=86\%(-5.8\%)\)}{\(T_{train}=0.42s(+320\%)\)} \\ \hline
-    TIMES NOW & \tworowcell{\(R=32.8\%\)}{\(T_{PS}=162.3s\)} & \tworowcell{\(Q=48.5\%(-27.6\%)\)}{\(T_{train}=0.13s(-80.6\%)\)} & \tworowcell{\(Q=87.8\%(-3.9\%)\)}{\(T_{train}=0.56s(+460\%)\)} \\ \hline
-    NDTV & \tworowcell{\(R=26.3\%\)}{\(T_{PS}=24.5s\)} & \tworowcell{\(Q=58.3\%(-25.5\%)\)}{\(T_{train}=0.03s(-97\%)\)} & \tworowcell{\(Q=90\%(-3.3\%)\)}{\(T_{train}=0.18s(+5.8\%)\)} \\ \hline
+	\input{cnn-table1.txt}
 \end{tabular}
 \newline \vspace*{0.5cm} \newline
 \begin{tabular}{|c||c|c|c|}
     \cline{2-4}
-    \multicolumn{1}{c||}{} & Random forest & SVM & GTB \\
+    \multicolumn{1}{c||}{} & SVM & Random forest & GTB \\
     \hline \hline
-    CNN & \tworowcell{\(Q=87.4\%(-4.8\%)\)}{\(T_{train}=3.98s(-74.8\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
-    BBC & \tworowcell{\(Q=75.1\%(-10.3\%)\)}{\(T_{train}=2.5s(-73.1\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
-    CNN-IBN & \tworowcell{\(Q=91.8\%(-2.6\%)\)}{\(T_{train}=6.2s(-72.3\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
-    TIMES NOW & \tworowcell{\(Q=90.1\%(-2.9\%)\)}{\(T_{train}=7.6s(-74.4\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
-    NDTV & \tworowcell{\(Q=94.4\%(-1\%)\)}{\(T_{train}=2.3s(-75.8\%)\)} & \tbd{No data yet} & \tbd{No data yet} \\ \hline
+	\input{cnn-table2.txt}
     \end{tabular}
     \caption{Сводная таблица результатов метода CNN и базовых методов после применения CNN}
     \label{table:cnn-results}
 \end{table}
 
-Из таблицы~\ref{table:cnn-results} видно, что метод CNN на всех каналах добился значительного сокращения обучающей выборки (от \(\frac23\) до \(\frac34\)). На редуцированной выборке метод 13 ближайших соседей стал работать намного быстрее (хотя на представленных наборах данных он и без редукции работал быстро), но его точность сильно пострадала. Линейный дискриминантный анализ также не получил большой пользы от выбора эталонов. С другой стороны, случайный лес сохранил свою точность (на каналах CNN-IBN, TIMESNOW, NDTV) и при этом отработал намного быстрее, чем на полных обучающих выборках.
+\tbd{Обновить} Из таблицы~\ref{table:cnn-results} видно, что метод CNN на всех каналах добился значительного сокращения обучающей выборки (от \(\frac23\) до \(\frac34\)). На редуцированной выборке метод 13 ближайших соседей стал работать намного быстрее (хотя на представленных наборах данных он и без редукции работал быстро), но его точность сильно пострадала. Линейный дискриминантный анализ также не получил большой пользы от выбора эталонов. С другой стороны, случайный лес сохранил свою точность (на каналах CNN-IBN, TIMESNOW, NDTV) и при этом отработал намного быстрее, чем на полных обучающих выборках.
 
 \subsection{Fast condensed nearest neighbor}
 Метод FCNN \cite{angiulli} был предложен с целью исправить некоторые недостатки CNN и других методов, основанных на \(k\)NN: зависимость результирующего подмножества \(S\) от порядка элементов в обучающей выборке и низкая производительность и масштабируемость. Сначала \(S\) содержит точки, ближайшие к барицентрам классов (барицентр класса --- \(\mathbf{x}_C=|C|^{-1}\sum_{c\in C}\mathbf{x}_c\), где \(C\) --- множество индексов обектов, принадлежащих одному классу). Затем, множество \(T\setminus S\) разбивается на \(|S|\) непересекающихся классов \(Vor(p, S, T)\) (так называмые Voronoi cells), в каждом из которых находятся объекты, для которых ближайшим соседом является один и тот же объект \(p\in S\). Затем все объекты из \(T\setminus S\) классифицируются методом ближайшего соседа с обучающей выборкой \(S\) и в каждом \(Vor(p, S, T)\) выбираются неверно классифицированные объекты, которые составляют множества \(Voren(p, S, T)\) (Voronoi enemies). После этого для каждого такого \(p\in S\), что \(Voren(p, S, T)\neq\varnothing\) выбирается ближайший к \(p\) объект из \(Voren(p, S, T)\) и они одновременно добавляются в \(S\). На каждой следующей итерации процедура повторяется для нового \(S\). Алгоритм останавливается, когда на последней итерации в \(S\) не было добавлено ни одного элемента.

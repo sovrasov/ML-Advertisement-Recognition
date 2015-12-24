@@ -14,6 +14,7 @@ for method in methods:
 	lines = f.readlines()
 	f.close()
 	string_data = map(lambda x: x.rstrip().split(), lines)
+        string_data = string_data[:3]
 	params, score_means, score_stds, time_means, time_stds = zip(*string_data)
 	params, score_means, score_stds, time_means, time_stds = map(float, params),map(float, score_means),map(float, score_stds),map(float, time_means),map(float, time_stds)
 	if channel == 'BBC':
