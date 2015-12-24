@@ -15,7 +15,7 @@ def main():
     channels = ( 'cnn', 'bbc', 'cnnibn', 'timesnow', 'ndtv' )
     channel_names = ( 'CNN', 'BBC', 'CNN-IBN', 'TIMES NOW', 'NDTV' )
 
-    cell_template = '& \\tworowcell{{\\(Q={:.2f}\\%\\)}}{{\\(T_{{train}}={:.4f}\\) s}} '
+    cell_template = '& \\tworowcell{{\\(Q={:.2f}\\%\\)}}{{\\(T_{{tr}}={:.4f}\\) s}} '
 
     output1 = open('base-table1.txt', 'wt')
     output2 = open('base-table2.txt', 'wt')

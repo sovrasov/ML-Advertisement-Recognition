@@ -1,0 +1,5 @@
+CNN & \tworowcell{\(R=41.73\%\)}{\(T_{PS}=64.06\) s} & \tworowcell{\(Q=57.31\%\;(-20.55\%)\)}{\(T_{tr}=0.119\) s \((\mathrm{x}\;0.416)\)} & \tworowcell{\(Q=85.24\%\;(-5.15\%)\)}{\(T_{tr}=0.332\) s \((\mathrm{x}\;48.172)\)} \\ \hline
+BBC & \tworowcell{\(R=48.78\%\)}{\(T_{PS}=45.32\) s} & \tworowcell{\(Q=48.38\%\;(-28.97\%)\)}{\(T_{tr}=0.129\) s \((\mathrm{x}\;0.600)\)} & \tworowcell{\(Q=69.75\%\;(-14.49\%)\)}{\(T_{tr}=0.303\) s \((\mathrm{x}\;67.849)\)} \\ \hline
+CNN-IBN & \tworowcell{\(R=39.21\%\)}{\(T_{PS}=128.68\) s} & \tworowcell{\(Q=47.69\%\;(-31.93\%)\)}{\(T_{tr}=0.186\) s \((\mathrm{x}\;0.379)\)} & \tworowcell{\(Q=86.20\%\;(-5.58\%)\)}{\(T_{tr}=0.467\) s \((\mathrm{x}\;48.106)\)} \\ \hline
+TIMES NOW & \tworowcell{\(R=41.34\%\)}{\(T_{PS}=185.91\) s} & \tworowcell{\(Q=48.27\%\;(-28.00\%)\)}{\(T_{tr}=0.210\) s \((\mathrm{x}\;0.336)\)} & \tworowcell{\(Q=87.13\%\;(-4.53\%)\)}{\(T_{tr}=0.529\) s \((\mathrm{x}\;41.838)\)} \\ \hline
+NDTV & \tworowcell{\(R=33.43\%\)}{\(T_{PS}=29.24\) s} & \tworowcell{\(Q=57.15\%\;(-26.93\%)\)}{\(T_{tr}=0.058\) s \((\mathrm{x}\;0.313)\)} & \tworowcell{\(Q=89.20\%\;(-4.12\%)\)}{\(T_{tr}=0.143\) s \((\mathrm{x}\;26.972)\)} \\ \hline

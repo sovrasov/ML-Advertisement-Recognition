@@ -1,5 +1,5 @@
-CNN & \tworowcell{\(Q=77.86\%\)}{\(T_{train}=0.2849\) s} & \tworowcell{\(Q=90.39\%\)}{\(T_{train}=-0.0069\) s} & \tworowcell{\(Q=91.89\%\)}{\(T_{train}=79.2210\) s} \\ \hline
-BBC & \tworowcell{\(Q=77.34\%\)}{\(T_{train}=0.2146\) s} & \tworowcell{\(Q=84.24\%\)}{\(T_{train}=-0.0045\) s} & \tworowcell{\(Q=86.07\%\)}{\(T_{train}=34.6414\) s} \\ \hline
-CNN-IBN & \tworowcell{\(Q=79.62\%\)}{\(T_{train}=0.4900\) s} & \tworowcell{\(Q=91.78\%\)}{\(T_{train}=-0.0097\) s} & \tworowcell{\(Q=94.53\%\)}{\(T_{train}=180.6149\) s} \\ \hline
-TIMES NOW & \tworowcell{\(Q=76.27\%\)}{\(T_{train}=0.6241\) s} & \tworowcell{\(Q=91.66\%\)}{\(T_{train}=-0.0126\) s} & \tworowcell{\(Q=92.90\%\)}{\(T_{train}=257.8325\) s} \\ \hline
-NDTV & \tworowcell{\(Q=84.08\%\)}{\(T_{train}=0.1848\) s} & \tworowcell{\(Q=93.32\%\)}{\(T_{train}=-0.0053\) s} & \tworowcell{\(Q=94.83\%\)}{\(T_{train}=16.9191\) s} \\ \hline
+CNN & \tworowcell{\(Q=77.86\%\)}{\(T_{tr}=0.2849\) s} & \tworowcell{\(Q=90.39\%\)}{\(T_{tr}=0.0069\) s} & \tworowcell{\(Q=91.89\%\)}{\(T_{tr}=79.2210\) s} \\ \hline
+BBC & \tworowcell{\(Q=77.34\%\)}{\(T_{tr}=0.2146\) s} & \tworowcell{\(Q=84.24\%\)}{\(T_{tr}=0.0045\) s} & \tworowcell{\(Q=86.07\%\)}{\(T_{tr}=34.6414\) s} \\ \hline
+CNN-IBN & \tworowcell{\(Q=79.62\%\)}{\(T_{tr}=0.4900\) s} & \tworowcell{\(Q=91.78\%\)}{\(T_{tr}=0.0097\) s} & \tworowcell{\(Q=94.53\%\)}{\(T_{tr}=180.6149\) s} \\ \hline
+TIMES NOW & \tworowcell{\(Q=76.27\%\)}{\(T_{tr}=0.6241\) s} & \tworowcell{\(Q=91.66\%\)}{\(T_{tr}=0.0126\) s} & \tworowcell{\(Q=92.90\%\)}{\(T_{tr}=257.8325\) s} \\ \hline
+NDTV & \tworowcell{\(Q=84.08\%\)}{\(T_{tr}=0.1848\) s} & \tworowcell{\(Q=93.32\%\)}{\(T_{tr}=0.0053\) s} & \tworowcell{\(Q=94.83\%\)}{\(T_{tr}=16.9191\) s} \\ \hline
